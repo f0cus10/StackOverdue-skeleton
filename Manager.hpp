@@ -1,0 +1,37 @@
+#include <unordered_map>
+#include <string>
+#include "Shell.hpp"
+class Manager{
+public:
+  //Given the correct criteria, the function will return a string consisting of all the the books in the library.
+  //If there are no books, return "No books in your library"
+  string browse(string criteria);
+  //Returns a full description of the specified book. If it is checked out, print those details as well.
+  string book(unsigned int bookID);
+  //Prints short description for all books in the library containing a specified phrase in either the book's title or author.
+  //Case-sensitive. Returns "No search results found", if none found.
+  string search(string criteria);
+  //Returns a description of the accounts
+  string accounts(string criteria);
+  //Returns a full description of a specified account
+  string account(unsigned int accountID);
+  //Checks out a specific book to a a specified account
+  bool checkout(unsigned int bookID, unsigned int accountID);
+  //Renews all the books in a specified account
+  string renew(unsigned int accountID);
+  //Returns a specific book to the library. Indicate if it was returned on time or overdue by some period of time.
+  string returnBook(unsigned int bookID);
+  //Generates a list of five book recommendations for a specified account
+  string recommend(unsigned int accountID);
+  string addBook(string title, string author, string genre);
+  string removeBook(unsigned int bookID);
+  string addAccount(string name);
+  string removeAccount(unsigned int accountID);
+  string system();
+  string time(unsigned int passTime);
+  string exportData();
+  string help();
+private:
+  unordered_map<unsigned int, Book*> shelf;
+  unordered_map<unsigned int, Account*> accounts;
+};
