@@ -32,6 +32,6 @@ public:
   string exportData();
   string help();
 private:
-  unordered_map<unsigned int, Book*> shelf;
-  unordered_map<unsigned int, Account*> accounts;
+  Shelf* shelf;
+  UserData* users;
 };
