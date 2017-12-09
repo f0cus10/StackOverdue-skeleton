@@ -28,6 +28,9 @@ public:
   //Checkout the book
   //If available, checkout book and return true; else, false.
   bool checkout(unsigned int userID, unsigned int currentTime, bool raisePopularity);
+  //Check if the book is equal to each other
+  bool operator==(const Book& other);
+  
 private:
   //Book Information
   unsigned int bookID;
