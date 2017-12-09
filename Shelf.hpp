@@ -10,7 +10,7 @@ public:
   //Default constructor
   //Overloaded Destructor
   ~Shelf();
-  //If a book exists, return true. Else, return false;
+  //If a book with the given title and 
   bool bookExists();
   //If a book does not exist in the collection, add it to the collection. Else, return false
   bool addBook(Book* newBook);
