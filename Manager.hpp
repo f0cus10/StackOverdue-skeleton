@@ -5,6 +5,10 @@
 using namespace std;
 class Manager{
 public:
+  //Overloaded Constructor
+  Manager(string bookFile = "", string accountFileName = "");
+  //Overloaded Destructor
+  ~Manager();
   //Given the correct criteria, the function will return a string consisting of all the the books in the library.
   //If there are no books, return "No books in your library"
   string browse(string criteria);
@@ -38,4 +42,6 @@ private:
   Pack* users;
   //Takes in a vector and returns a string
   string vectorToString(vector<const Book*>&);
+  unordered_map<unsigned int, vector<string> > initialState;
+  void updateInitialState();
 };
