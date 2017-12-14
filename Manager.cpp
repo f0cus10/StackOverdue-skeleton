@@ -35,7 +35,7 @@ string Manager::browse(string criteria){
   //We must decide which comparison function to use based on the criteria
   //Use else-if with function pointers
   //Import the entire shelf as a vector
-  vector<const Book*> sortCandidate = shelf->output();
+  vector<const Book* const> sortCandidate = shelf->output();
   //Then, we pass in the vector in the sorting algorithm
   sort(sortCandidate.begin(), sortCandidate.end());
   return vectorToString(sortCandidate);

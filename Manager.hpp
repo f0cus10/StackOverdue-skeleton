@@ -38,10 +38,15 @@ public:
   string exportData();
   string help();
 private:
+  //Database
   Shelf* shelf;
   Pack* users;
-  //Takes in a vector and returns a string
-  string vectorToString(vector<const Book*>&);
+  //Initialisation step arguments
   unordered_map<unsigned int, vector<string> > initialState;
+  //Uses initialState to update the borrow status from the user files
+  //After completion, erase the map
   void updateInitialState();
+  /* Useful Member functions */
+  //Takes in a vector and returns a string
+  string vectorToString(vector<const Book* const>&);
 };

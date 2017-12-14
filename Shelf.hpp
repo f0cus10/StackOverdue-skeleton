@@ -18,12 +18,12 @@ public:
   bool removeBook(unsigned int id);
   //Return a vector containing all the books in the library
   //NOTE: To be used with the exporter
-  vector<const Book*> output();
+  vector<const Book* const> output();
   //Given the bookID, return the book
-  const Book* getBook(unsigned int id);
+  Book* const getBook(unsigned int id);
   //If books are present containing the same substring, return a vector containg the boooks. Return empty vector, otherwise.
   //type must be either T or A;
-  vector<const Book*> search(string phrase, char type);
+  vector<const Book* const> search(string phrase, char type);
   //Return a specified book to the library. Modifies borrowerID to the user who had the book. Modifies 
   void returnBook(unsigned int id, unsigned int& borrowerID, unsigned int& returnTime);
   

@@ -22,9 +22,9 @@ public:
   //Given an account, add it to the collection
   void addAccount(Account* newAccount);
   //Return a vector containing all the accounts for the sorting algorithms
-  vector<const Account*> getAccounts() const;
+  vector<const Account* const> getAccounts() const;
   //Return a const-pointer to the account, given accountID
-  const Account* getAccount(unsigned int accountID);
+  Account* const getAccount(unsigned int accountID);
 private:
   unordered_map<unsigned int, Account*> accounts;
   //unordered_map<unsigned int, Account*> cemetery;

@@ -22,14 +22,14 @@ void Pack::addAccount(Account* newAccount){
   accounts[newAccount->getID()] = newAccount;
 }
 //Return a vector containing all the accounts for the sorting algorithms
-vector<const Account*> Pack::getAccounts() const {
-  vector<const Account*> tmp (accounts.size());
+vector<const Account* const> Pack::getAccounts() const {
+  vector<const Account* const> tmp (accounts.size());
   for(auto iter = accounts.begin(); iter != accounts.end(); ++iter){
     tmp.push_back(iter->second);
   }
   return tmp;
 }
 //Return a const-pointer to the account, given accountID
-const Account* Pack::getAccount(unsigned int accountID){
+Account* const Pack::getAccount(unsigned int accountID){
   return accounts[accountID];
 }
