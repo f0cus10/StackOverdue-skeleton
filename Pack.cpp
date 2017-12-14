@@ -16,10 +16,25 @@ Pack::~Pack(){
     delete iter->second;
   }
   accounts.clear();
+  for(unsigned int i = 0; i < cemetery.size(); ++i){
+    delete cemetery[i];
+  }
+  cemetery.clear();
 }
 //Given an account, add it to the collection
 void Pack::addAccount(Account* newAccount){
   accounts[newAccount->getID()] = newAccount;
+  if(maxID < newAccount->getID()){
+    maxID = newAccount->getID() + 1;
+  }
+}
+//Given a userID, add it to the graveyard
+void Pack::removeAccount(unsigned int accountID){
+  auto candidate = accounts.find(accountID);
+  if(candidate != accounts.end()){
+    cemetery.push_back(accounts[accountID]);
+    accounts.erase(candidate);
+  }
 }
 //Return a vector containing all the accounts for the sorting algorithms
 vector<const Account* const> Pack::getAccounts() const {

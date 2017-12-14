@@ -21,13 +21,18 @@ public:
   ~Pack();
   //Given an account, add it to the collection
   void addAccount(Account* newAccount);
+  //Given a userID, add it to the graveyard
+  void removeAccount(unsigned int accountID);
   //Return a vector containing all the accounts for the sorting algorithms
   vector<const Account* const> getAccounts() const;
   //Return a const-pointer to the account, given accountID
   Account* const getAccount(unsigned int accountID);
+  //Generate a new userID
+  unsigned int generateID(){return maxID; }
 private:
   unordered_map<unsigned int, Account*> accounts;
-  //unordered_map<unsigned int, Account*> cemetery;
+  unsigned int maxID;
+  vector<Account*> cemetery;
 };
 
 #endif /* Pack_hpp */
