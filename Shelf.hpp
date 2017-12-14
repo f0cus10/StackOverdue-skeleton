@@ -10,8 +10,8 @@ public:
   //Default constructor
   //Overloaded Destructor
   ~Shelf();
-  //If a book with the given title and 
-  bool bookExists();
+  //If a book with the given title and author exists, return true;
+  bool bookExists(string title, string author);
   //If a book does not exist in the collection, add it to the collection. Else, return false
   bool addBook(Book* newBook);
   //Remove a book from the collection
@@ -26,9 +26,10 @@ public:
   vector<const Book* const> search(string phrase, char type);
   //Return a specified book to the library. Modifies borrowerID to the user who had the book. Modifies 
   void returnBook(unsigned int id, unsigned int& borrowerID, unsigned int& returnTime);
-  
+  unsigned int generateID() const {return maxID; }
 private:
   unordered_map<unsigned int, Book*> collection;
   unordered_map<unsigned int, Book*> graveyard;
+  unsigned int maxID = 0;
 };
 #endif
