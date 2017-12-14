@@ -8,7 +8,7 @@ class Book{
 public:
   Book(unsigned int id, string title, string author, string gen = "", unsigned int score = 0);
   //If book have been renewed twice, returns false. Otherwise, renews books and returns true
-  bool renew(unsigned int currentTime);
+  bool renew(unsigned int dueDate);
   //Returns the book to the library, that is, erases all borrower information
   void returnBook();
   
@@ -27,7 +27,7 @@ public:
   
   //Checkout the book
   //If available, checkout book and return true; else, false.
-  bool checkout(unsigned int userID, unsigned int currentTime, bool raisePopularity);
+  bool checkout(unsigned int userID, unsigned int dueDate, bool raisePopularity);
   //Check if the book is equal to each other
   bool operator==(const Book& other);
   
@@ -41,8 +41,8 @@ private:
   //A == Available,B == Borrowed
   char status;
   //Borrower Information
-  unsigned int borrowerID;
-  unsigned int due;
-  unsigned int renewed;
+  unsigned int borrowerID = 0;
+  unsigned int due = 0;
+  unsigned int renewed = 0;
 };
 #endif

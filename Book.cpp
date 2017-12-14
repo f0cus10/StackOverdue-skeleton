@@ -9,12 +9,12 @@ Book::Book(unsigned int id, string title, string author, string gen, unsigned in
   popScore = score;
 }
 //If book have been renewed twice, returns false. Otherwise, renews books and returns true
-bool Book::renew(unsigned int currentTime){
+bool Book::renew(unsigned int dueDate){
   //Check if book has been renewed twice
   if(renewed >= 2){
     return false;
   }
-  due = currentTime+15;
+  due = dueDate;
   renewed += 1;
   return true;
 }
@@ -27,13 +27,13 @@ void Book::returnBook(){
 }
 //Checkout the book
 //If available, checkout book and return true; else, false.
-bool Book::checkout(unsigned int userID, unsigned int currentTime, bool raisePopularity){
+bool Book::checkout(unsigned int userID, unsigned int dueDate, bool raisePopularity){
   //If book is borrowed, return false;
   if(status == 'B'){
     return false;
   }
   borrowerID = userID;
-  due = currentTime + 15;
+  due = dueDate;
   renewed = 0;
   status = 'B';
   if(raisePopularity){
