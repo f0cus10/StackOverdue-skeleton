@@ -21,8 +21,8 @@ public:
   ~Pack();
   //Given an account, add it to the collection
   void addAccount(Account* newAccount);
-  //Return a vector containing all the accounts
-  vector<const Account*> getAccounts();
+  //Return a vector containing all the accounts for the sorting algorithms
+  vector<const Account*> getAccounts() const;
   //Return a const-pointer to the account, given accountID
   const Account* getAccount(unsigned int accountID);
 private:
