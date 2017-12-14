@@ -21,8 +21,10 @@ void Account::checkout(unsigned int bookID){
 }
 //Return a book to the library and add it to the list of previous borrows
 //TODO: Consider using UniqueVector instead of std::Vector
-void Account::returnBook(unsigned int index){
+void Account::returnBook(unsigned int bookID){
   //Add the book into the list of previousBorrow
+  unsigned int index;
+  contains(bookID, index);
   previousBorrows.push_back(previousBorrows[index]);
   //Find the index of the bookID
   borrowedBooksID.erase(borrowedBooksID.begin()+index);

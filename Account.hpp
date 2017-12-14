@@ -16,7 +16,7 @@ public:
   //Add a book to the list of currently borrowed books
   void checkout(unsigned int bookID);
   //Return a book to the library and add it to the list of previous borrows
-  void returnBook(unsigned int index);
+  void returnBook(unsigned int bookID);
   //If bookID is being borrowed in the current period, return true and modify index to the index of the book in the vector
   bool contains(unsigned int bookID, unsigned int& index, char period = 'C');
   
