@@ -12,9 +12,23 @@
 #include <algorithm>
 #include "Shelf.hpp"
 #include "Pack.hpp"
+#include "BookParser.hpp"
+#include "AccountParser.hpp"
 
 using namespace std;
-
+Manager::Manager(string bookFile, string accountFileName){
+  BookParser bookReader(bookFile);
+  AccountParser accountReader(accountFileName);
+  //Import the pointers
+  shelf = bookReader.buildShelf();
+  users = accountReader.buildPack(initialState);
+  //Update initial status
+  updateInitialState();
+}
+Manager::~Manager(){
+  delete shelf;
+  delete users;
+}
 //Given the correct criteria, the function will return a string consisting of all the the books in the library.
 //If there are no books, return "No books in your library"
 string Manager::browse(string criteria){
