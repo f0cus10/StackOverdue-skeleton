@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include "Book.hpp"
-#include "UniqueVector.hpp"
 class Account{
 public:
   //Overloaded Constructor
@@ -20,6 +19,9 @@ public:
   void returnBook(unsigned int index);
   //If bookID is being borrowed in the current period, return true and modify index to the index of the book in the vector
   bool contains(unsigned int bookID, unsigned int& index, char period = 'C');
+  
+  string getName() const { return username; }
+  unsigned int getID() const { return userID; }
 private:
   string username;
   unsigned int userID;
