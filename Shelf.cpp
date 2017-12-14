@@ -51,6 +51,7 @@ vector<const Book*> Shelf::output(){
 }
 //If books are present containing the same substring, return a vector containg the boooks. Return empty vector, otherwise.
 //type must be either T or A;
+//TODO: Finish this
 vector<const Book*> Shelf::search(string phrase, char type){
   vector<const Book*> temp;
   return temp;

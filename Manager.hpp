@@ -1,6 +1,8 @@
 #include <unordered_map>
 #include <string>
-#include "Shell.hpp"
+#include "Shelf.hpp"
+#include "Pack.hpp"
+using namespace std;
 class Manager{
 public:
   //Given the correct criteria, the function will return a string consisting of all the the books in the library.
@@ -33,5 +35,7 @@ public:
   string help();
 private:
   Shelf* shelf;
-  UserData* users;
+  Pack* users;
+  //Takes in a vector and returns a string
+  string vectorToString(vector<const Book*>&);
 };
