@@ -16,9 +16,9 @@ using namespace std;
 class Parser{
 public:
   Parser(string file);
+  static vector<string> tokenizer(const string& info);
 protected:
   string fileName;
-  static vector<string> tokenizer(const string& info);
 };
 
 #endif /* Parser_hpp */
