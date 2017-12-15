@@ -207,6 +207,7 @@ string Manager::removeBook(unsigned int bookID){
   }
   outcome += "\"" + shelf->getBook(bookID)->getTitle() + "\" by ";
   outcome += shelf->getBook(bookID)->getAuthor() + " successfully removed.\n";
+  shelf->removeBook(bookID);
   return outcome;
 }
 string Manager::addAccount(string name){

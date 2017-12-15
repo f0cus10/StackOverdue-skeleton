@@ -9,6 +9,8 @@
 using namespace std;
 class Manager{
 public:
+  //If a book with the same title and author exists, return true
+  bool bookExists(string title, string author){return shelf->bookExists(title, author); }
   //Returns true if the account can borrow, modifies the string to the reason for not being able to borrow.
   bool canBorrow(unsigned int, string&);
   //Returns true if a book or user with the specified id exists

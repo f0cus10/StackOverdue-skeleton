@@ -180,14 +180,35 @@ void Shell::callReturn(){
 }
 //Call Recommend
 void Shell::callRecommend(){
-  
+  cout << "This function has not been implemented yet " << endl;
 }
 //You get the idea
 void Shell::callAddb(){
+  string newTitle;
+  string newAuthor;
+  string newGenre;
+  cout << "Enter the new book's title." << endl;
+  cout << "> ";
+  getline(cin, newTitle);
   
+  cout << "Enter the new book's author." << endl;
+  cout << "> ";
+  getline(cin, newAuthor);
+  if(librarian->bookExists(newTitle, newAuthor)){
+    cout << "Book with this title and author already exists." << endl;
+    return;
+  }
+  
+  cout << "Enter the new book's genre." << endl;
+  cout << "> ";
+  getline(cin, newGenre);
+  cout << librarian->addBook(newTitle, newAuthor, newGenre) << endl;
+  return;
 }
 void Shell::callRemoveb(){
-  
+  unsigned int toBeRemoved = idValidator("book");
+  if (toBeRemoved == 0) return;
+  cout << librarian->removeBook(toBeRemoved) << endl;
 }
 void Shell::callAdda(){
   
