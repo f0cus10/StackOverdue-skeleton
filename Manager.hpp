@@ -43,6 +43,8 @@ public:
   void time(unsigned int passTime);
   string exportData();
   string help();
+  
+  vector<unsigned int> getNonExistent()const {return nonexistent;}
 private:
   /* Database */
   Shelf* shelf;
@@ -50,6 +52,7 @@ private:
   
   /* Initial step members */
   unordered_map<unsigned int, vector<string> > initialState;
+  vector<unsigned int> nonexistent;
   //Uses initialState to update the borrow status from the user files
   //After completion, erase the map
   void updateInitialState();

@@ -16,6 +16,7 @@ private:
   Manager* librarian;
   bool status = true;
   string criteriaHelper(const vector<string>& criterion);
+  unsigned int idValidator(string type);
   //Returns whether the command string is valid and if it points to a keyword in the array.
   bool isValid(string command);
   //Prints the values mapped to the commands

@@ -6,6 +6,9 @@
 using namespace std;
 Shell::Shell(string bookFile, string accountFileName){
   librarian = new Manager(bookFile, accountFileName);
+  for(unsigned int i = 0; i < librarian->getNonExistent().size(); ++i){
+    cout << "Could not find library book with ID# " << librarian->getNonExistent()[i] << endl;
+  }
 }
 Shell::~Shell(){
   delete librarian;
@@ -91,19 +94,9 @@ void Shell::callBrowse(){
 }
 //Call book
 void Shell::callBook(){
-  cout << "Enter the book id." << endl << endl;
-  cout << "> ";
-  string userInput;
-  getline(cin, userInput);
-  unsigned int input;
-  try{
-    input = stoi(userInput);
-  }
-  catch(exception& e){
-    cout << "Invalid Value." << endl << endl;
-    return;
-  }
+  unsigned int input = idValidator("book");
   //Then access the librarian
+  if(input == 0) return;
   string output = librarian->book(input, false);
   cout << output;
 }
@@ -131,7 +124,10 @@ void Shell::callAccounts(){
 }
 //Call account
 void Shell::callAccount(){
-  
+  unsigned int accountID = idValidator("account");
+  if(accountID == 0) return;
+  string output = librarian->account(accountID);
+  cout << output << endl;
 }
 //call checkout
 void Shell::callCheckout(){
@@ -212,4 +208,19 @@ string Shell::criteriaHelper(const vector<string>& criterion){
     return "Invalid Value.\n\n";
   }
   return *iter;
+}
+unsigned int Shell::idValidator(string type){
+  cout << "Enter the " << type << " id." << endl << endl;
+  cout << "> ";
+  string userInput;
+  getline(cin, userInput);
+  unsigned int input;
+  try{
+    input = stoi(userInput);
+  }
+  catch(exception& e){
+    cout << "Invalid Value." << endl << endl;
+    return 0;
+  }
+  return input;
 }

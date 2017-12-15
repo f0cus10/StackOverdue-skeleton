@@ -90,10 +90,15 @@ bool Manager::checkout(unsigned int bookID, unsigned int accountID, unsigned int
   unsigned int bookIndex;
   if (dueDate == 0) dueDate = systemTime.getTime()+15;
   //If book was borrowed previously, do not raise the popularity
+  bool status;
   if(users->getAccount(accountID)->contains(bookID, bookIndex, 'P')){
-    return shelf->getBook(bookID)->checkout(accountID, dueDate, false);
+    status = shelf->getBook(bookID)->checkout(accountID, dueDate, false);
   }
-  return shelf->getBook(bookID)->checkout(accountID, dueDate, true);
+  status = shelf->getBook(bookID)->checkout(accountID, dueDate, true);
+  if(status){
+    users->getAccount(accountID)->checkout(bookID);
+  }
+  return status;
 }
 //Renews all the books in a specified account
 string Manager::renew(unsigned int accountID, unsigned int newDueDate){
@@ -201,7 +206,12 @@ void Manager::updateInitialState(){
     for(auto eachElement: iter.second){
       vector<string> updateInformation = Parser::tokenizer(eachElement);
       //Checkout the book to the user
-      checkout(stoi(updateInformation[0]), iter.first);
+      if(shelf->getBook(stoi(updateInformation[0])) == nullptr){
+        nonexistent.push_back(stoi(updateInformation[0]));
+      }
+      else{
+        checkout(stoi(updateInformation[0]), iter.first);
+      }
       //Renew the book number of times listed
       for(unsigned int i = 0; i < stoi(updateInformation[2]); ++i){
         renew(iter.first, stoi(updateInformation[1]));

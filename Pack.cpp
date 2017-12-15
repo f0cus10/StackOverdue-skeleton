@@ -38,7 +38,9 @@ void Pack::removeAccount(unsigned int accountID){
 }
 //Return a vector containing all the accounts for the sorting algorithms
 vector<Account*> Pack::getAccounts() const {
-  vector<Account*> tmp (accounts.size());
+  
+  vector<Account*> tmp;
+  tmp.reserve(accounts.size());
   for(auto eachAccount: accounts){
     if(eachAccount.second != nullptr) tmp.push_back(eachAccount.second);
   }
