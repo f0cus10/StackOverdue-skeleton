@@ -9,6 +9,13 @@
 using namespace std;
 class Manager{
 public:
+  //Returns true if the account can borrow, modifies the string to the reason for not being able to borrow.
+  bool canBorrow(unsigned int, string&);
+  //Returns true if a book or user with the specified id exists
+  //the char determines the type to search for
+  bool isValid(unsigned int, char);
+  //If account has overdue books, return true and modify number to the number of overdue books.
+  bool hasOverdue(unsigned int accountID, unsigned int& number);
   //Overloaded Constructor
   Manager(string bookFile = "", string accountFileName = "");
   //Overloaded Destructor

@@ -24,7 +24,7 @@ public:
   string getAuthor() const {return bookAuthor; }
   string getGenre() const {return genre; }
   unsigned int getRenewed() const { return renewed; }
-  bool isOverdue(unsigned int currTime)const{ return due < currTime;}
+  bool isOverdue(unsigned int currTime)const{ return (due < currTime) && (due!=0);}
   
   //Checkout the book
   //If available, checkout book and return true; else, false.
@@ -40,7 +40,7 @@ private:
   string genre;
   unsigned int popScore;
   //A == Available,B == Borrowed
-  char status;
+  char status = 'A';
   //Borrower Information
   unsigned int borrowerID = 0;
   unsigned int due = 0;

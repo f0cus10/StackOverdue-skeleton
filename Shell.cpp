@@ -131,7 +131,33 @@ void Shell::callAccount(){
 }
 //call checkout
 void Shell::callCheckout(){
+  unsigned int accountID = idValidator("account");
+  if(accountID == 0) return;
+  unsigned int bookID = idValidator("book");
+  if(bookID == 0) return;
   
+  if(!librarian->isValid(accountID, 'A')){
+    cout << "AccountID# " << accountID << " not found." << endl;
+    return;
+  }
+  else if(!librarian->isValid(bookID, 'B')){
+    cout << "BookID# " << bookID << " not found." << endl;
+    return;
+  }
+  string reason;
+  if(!librarian->canBorrow(accountID, reason)){
+    cout << reason << endl;
+    return;
+  }
+  string output = librarian->book(bookID, false);
+  output = output.substr(0,output.find("AVAILABLE"));
+  if(librarian->checkout(bookID, accountID) == false){
+    cout << "Book already is checked out." << endl;
+    return;
+  }
+  cout << "Book successfully checked out." << endl;
+  cout << output << endl;
+  return;
 }
 //Call renew
 void Shell::callRenew(){

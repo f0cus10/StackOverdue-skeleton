@@ -32,6 +32,42 @@ Manager::~Manager(){
   delete shelf;
   delete users;
 }
+//Returns true if the account can borrow, modifies the string to the reason for not being able to borrow.
+bool Manager::canBorrow(unsigned int id, string& reason){
+  unsigned int decoy = 0;
+  if(users->getAccount(id)->borrowSize() >= 10){
+    reason = "Account already has 10 books checked out.";
+    return false;
+  }
+  else if(hasOverdue(id,decoy)){
+    reason = "Account has books overdue.";
+    return false;
+  }
+  return true;
+}
+//Returns true if a book or user with the specified id exists
+//the char determines the type to search for
+bool Manager::isValid(unsigned int id, char type){
+  switch (type) {
+    case 'B':
+      if(shelf->getBook(id) == nullptr) return false;
+    case 'A':
+      if(users->getAccount(id) == nullptr) return false;
+    default:
+      return true;
+  }
+}
+//If account has overdue books, return true and modify number to the number of overdue books.
+bool Manager::hasOverdue(unsigned int accountID, unsigned int& number){
+  vector<unsigned int> borrowed = users->getAccount(accountID)->currentBorrowList();
+  for(auto iter: borrowed){
+    if(shelf->getBook(iter)->isOverdue(systemTime.getTime())){
+      number += 1;
+    }
+  }
+  if(number > 0) return true;
+  return false;
+}
 //Given the correct criteria, the function will return a string consisting of all the the books in the library.
 //If there are no books, return "No books in your library"
 vector<string> Manager::browse(string criteria){

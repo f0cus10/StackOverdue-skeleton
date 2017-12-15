@@ -80,7 +80,7 @@ string Archivist::printBook(const Book* const book, unsigned int time, bool incl
   result += "Author: " + book->getAuthor() + ending;
   result += "BookID# " + to_string(book->getID()) + ending;
   result += "Popularity Score: " + to_string(book->popularityScore()) + ending;
-  if(!includeTabs) result += "Borrower AccountID# " + to_string(book->borrower()) + ending;
+  if(!includeTabs && book->availability() == 'B') result += "Borrower AccountID# " + to_string(book->borrower()) + ending;
   result += "Due Date: " + to_string(book->dueDate()) + ending;
   result += "Times Renewed: " + to_string(book->getRenewed()) + ending;
   if(book->isOverdue(time)){
