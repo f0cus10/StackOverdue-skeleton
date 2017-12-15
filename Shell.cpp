@@ -162,11 +162,21 @@ void Shell::callCheckout(){
 //Call renew
 void Shell::callRenew(){
   unsigned int accountID = idValidator("account");
+  if(librarian->isValid(accountID, 'A') == false){
+    cout << "AccountID# " << accountID << " not found. " << endl;
+    return;
+  }
   cout << librarian->renew(accountID) << endl;
 }
 //Call return
 void Shell::callReturn(){
-  
+  unsigned int bookID = idValidator("book");
+  if(librarian->isValid(bookID, 'B') == false){
+    cout << "BookID# " << bookID << " not found. " << endl;
+    return;
+  }
+  cout << librarian->returnBook(bookID) << endl;
+  return;
 }
 //Call Recommend
 void Shell::callRecommend(){

@@ -51,8 +51,10 @@ bool Manager::isValid(unsigned int id, char type){
   switch (type) {
     case 'B':
       if(shelf->getBook(id) == nullptr) return false;
+      return true;
     case 'A':
       if(users->getAccount(id) == nullptr) return false;
+      return true;
     default:
       return true;
   }
@@ -122,6 +124,7 @@ string Manager::account(unsigned int accountID){
   result += "\n";
   vector<unsigned int> tmp = users->getAccount(accountID)->currentBorrowList();
   for(unsigned int i = 0; i < tmp.size(); ++i){
+    result += "\t" + to_string(i+1) + ".\n";
     result += "\t" +archivist.printBook(shelf->getBook(tmp[i]), systemTime.getTime(), true);
     result += "\n";
   }
@@ -173,7 +176,7 @@ string Manager::renew(unsigned int accountID, unsigned int newDueDate){
 string Manager::returnBook(unsigned int bookID){
   //First return the book from the shelf
   Book* const tmp = shelf->getBook(bookID);
-  if(tmp->availability() == 'B'){
+  if(tmp->availability() == 'A'){
     return "Book is not currently checked out.";
   }
   unsigned int dueDate = tmp->dueDate();
