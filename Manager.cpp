@@ -118,7 +118,14 @@ vector<string> Manager::accounts(string criteria, unordered_map<unsigned int, ve
 }
 //Returns a full description of a specified account
 string Manager::account(unsigned int accountID){
-  return archivist.printAccount(users->getAccount(accountID));
+  string result = archivist.printAccount(users->getAccount(accountID));
+  result += "\n";
+  vector<unsigned int> tmp = users->getAccount(accountID)->currentBorrowList();
+  for(unsigned int i = 0; i < tmp.size(); ++i){
+    result += "\t" +archivist.printBook(shelf->getBook(tmp[i]), systemTime.getTime(), true);
+    result += "\n";
+  }
+  return result;
 }
 //Checks out a specific book to a a specified account
 //Input must be evaluated beforehand

@@ -95,6 +95,6 @@ string Archivist::printAccount(const Account* const user){
   string result = "";
   result += "Name: " + user->getName() + "\n";
   result += "AccountID#: " + to_string(user->getID()) + "\n";
-  result += to_string(user->currentBorrowList().size()) + " books checked out";
+  result += to_string(user->getBorrowSize()) + " books checked out";
   return result;
 }

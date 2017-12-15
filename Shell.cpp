@@ -161,7 +161,8 @@ void Shell::callCheckout(){
 }
 //Call renew
 void Shell::callRenew(){
-  
+  unsigned int accountID = idValidator("account");
+  cout << librarian->renew(accountID) << endl;
 }
 //Call return
 void Shell::callReturn(){
