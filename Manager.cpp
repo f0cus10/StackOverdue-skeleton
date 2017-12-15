@@ -13,8 +13,10 @@
 #include "Shelf.hpp"
 #include "Pack.hpp"
 #include "Book.hpp"
+#include "Parser.hpp"
 #include "BookParser.hpp"
 #include "AccountParser.hpp"
+#include "Archivist.hpp"
 
 using namespace std;
 Manager::Manager(string bookFile, string accountFileName){
@@ -32,35 +34,51 @@ Manager::~Manager(){
 }
 //Given the correct criteria, the function will return a string consisting of all the the books in the library.
 //If there are no books, return "No books in your library"
-string Manager::browse(string criteria){
+vector<string> Manager::browse(string criteria){
   //We must decide which comparison function to use based on the criteria
   //Use else-if with function pointers
   //Import the entire shelf as a vector
-  vector<const Book* const> sortCandidate = shelf->output();
-  bool (*comparator)(Book&, Book&) = archivist.bookSortSelector(criteria);
+  vector<Book*> sortCandidate = shelf->output();
+  
+  bool(*comparator)(Book*&, Book*&) = archivist.bookSortSelector(criteria);
   //Then, we pass in the vector in the sorting algorithm
   sort(sortCandidate.begin(), sortCandidate.end(), comparator);
   return archivist.bookToString(sortCandidate);
 }
 //Returns a full description of the specified book. If it is checked out, print those details as well.
 //If book does not exist, return ""
-string Manager::book(unsigned int bookID){
+string Manager::book(unsigned int bookID, bool tabs){
   Book* const tmp = shelf->getBook(bookID);
-  return archivist.printBook(tmp);
+  if (tmp == nullptr){
+    return "BookID# " + to_string(bookID) + " not found.\n";
+  }
+  return archivist.printBook(tmp, systemTime.getTime(), tabs);
 }
 //Prints short description for all books in the library containing a specified phrase in either the book's title or author.
 //Case-sensitive. Returns "No search results found", if none found.
-string Manager::search(string phrase, char criteria){
-  vector<const Book* const> searchResult = shelf->search(phrase, criteria);
+vector<string> Manager::search(string phrase, char criteria){
+  vector<Book*> searchResult = shelf->search(phrase, criteria);
   return archivist.bookToString(searchResult);
 }
 //Returns a description of the accounts
-string Manager::accounts(string criteria){
-  vector<const Account* const> sortCandidate = users->getAccounts();
-  bool(*comparator)(Account&, Account&) = archivist.accountSortSelector(criteria);
+vector<string> Manager::accounts(string criteria, unordered_map<unsigned int, vector<string> >& bookMapper){
+  vector< Account*> sortCandidate = users->getAccounts();
+  bool (*comparator)(Account*&, Account*&) = archivist.accountSortSelector(criteria);
   sort(sortCandidate.begin(), sortCandidate.end(), comparator);
-  //
-  return archivist.accountToString(sortCandidate);
+  //Create the user account list
+  vector<string> accountList = archivist.accountToString(sortCandidate);
+  for(unsigned int i = 0; i < sortCandidate.size(); ++i){
+    //First convert currentBorrowList into books
+    //create a temp vector
+    vector<Book*> tmp;
+    tmp.reserve(sortCandidate[i]->borrowSize());
+    for(unsigned int j = 0; j < sortCandidate[i]->borrowSize(); ++j){
+      tmp.push_back(shelf->getBook(sortCandidate[i]->currentBorrowList()[j]));
+    }
+    //Temp should contain all book pointers for that user
+    bookMapper[i] = archivist.bookToString(tmp, true);
+  }
+  return accountList;
 }
 //Returns a full description of a specified account
 string Manager::account(unsigned int accountID){
@@ -68,13 +86,14 @@ string Manager::account(unsigned int accountID){
 }
 //Checks out a specific book to a a specified account
 //Input must be evaluated beforehand
-bool Manager::checkout(unsigned int bookID, unsigned int accountID){
+bool Manager::checkout(unsigned int bookID, unsigned int accountID, unsigned int dueDate){
   unsigned int bookIndex;
+  if (dueDate == 0) dueDate = systemTime.getTime()+15;
   //If book was borrowed previously, do not raise the popularity
   if(users->getAccount(accountID)->contains(bookID, bookIndex, 'P')){
-    return shelf->getBook(bookID)->checkout(accountID, systemTime.getTime(), false);
+    return shelf->getBook(bookID)->checkout(accountID, dueDate, false);
   }
-  return shelf->getBook(bookID)->checkout(accountID, systemTime.getTime(), true);
+  return shelf->getBook(bookID)->checkout(accountID, dueDate, true);
 }
 //Renews all the books in a specified account
 string Manager::renew(unsigned int accountID, unsigned int newDueDate){
@@ -91,7 +110,7 @@ string Manager::renew(unsigned int accountID, unsigned int newDueDate){
     result += "\t";
     result += to_string(i+1) + ".\n";
     //TODO: add a tabbed output parameter to the printBook() function
-    result += archivist.printBook(shelf->getBook(borrowList[i]));
+    result += archivist.printBook(shelf->getBook(borrowList[i]), true);
     
     if(shelf->getBook(borrowList[i])->renew(newDueDate)){
       result += "Book successfully renewd.\n";
@@ -122,10 +141,12 @@ string Manager::returnBook(unsigned int bookID){
 }
 //Generates a list of five book recommendations for a specified account
 //F*CK
-string Manager::recommend(unsigned int accountID);
+//string Manager::recommend(unsigned int accountID);
 string Manager::addBook(string title, string author, string genre){
   //To save time, we'll do something radical
-  shelf->addBook(new Book(shelf->generateID(), title, author, genre));
+  unsigned int newID = shelf->generateID();
+  shelf->addBook(new Book(newID, title, author, genre));
+  return "BookID# " + to_string(newID) + " sucessfully created.\n";
 }
 string Manager::removeBook(unsigned int bookID){
   string outcome = "";
@@ -138,7 +159,9 @@ string Manager::removeBook(unsigned int bookID){
   return outcome;
 }
 string Manager::addAccount(string name){
-  users->addAccount(new Account(users->generateID(), name));
+  unsigned int newID = users->generateID();
+  users->addAccount(new Account(newID, name));
+  return "AccountID# " + to_string(newID) + " successfully created.\n";
 }
 string Manager::removeAccount(unsigned int accountID){
   string outcome = "";
@@ -154,10 +177,36 @@ string Manager::removeAccount(unsigned int accountID){
   users->removeAccount(accountID);
   return outcome;
 }
-string Manager::system(){
-  
+//string Manager::system(){
+//  string info = "";
+//  info += "System time: " + to_string(systemTime.getTime());
+//  info += "Number of books: " + to_string(shelf->collectionSize());
+//  info += "Number of overdue books: " + archivist.countOverdueBooks(shelf).size();
+//  info += "Number of accounts: " + users->dataBaseSize();
+//  info += "Number of overdue books" + archivist.countOverdueAccounts.size();
+//}
+void Manager::time(unsigned int passTime){
+  systemTime.updateTime(passTime);
 }
-string Managertime(unsigned int passTime);
-string Manager::exportData();
-string Manager::help();
-
+string Manager::exportData(){
+  return "Placeholder";
+}
+//string Manager::help();
+//Uses initialState to update the borrow status from the user files
+//After completion, erase the map
+void Manager::updateInitialState(){
+  //Iterate over each userID and update info
+  for(auto iter: initialState){
+    //Take each of the elements in the mapped vector and tokenize it
+    for(auto eachElement: iter.second){
+      vector<string> updateInformation = Parser::tokenizer(eachElement);
+      //Checkout the book to the user
+      checkout(stoi(updateInformation[0]), iter.first);
+      //Renew the book number of times listed
+      for(unsigned int i = 0; i < stoi(updateInformation[2]); ++i){
+        renew(iter.first, stoi(updateInformation[1]));
+      }
+    }
+  }
+  initialState.clear();
+}

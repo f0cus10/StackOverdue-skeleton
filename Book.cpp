@@ -41,6 +41,3 @@ bool Book::checkout(unsigned int userID, unsigned int dueDate, bool raisePopular
   }
   return true;
 }
-bool Book::operator==(const Book& other){
-  return (this->bookTitle == other.bookTitle) && (this->bookAuthor == other.bookAuthor);
-}

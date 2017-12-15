@@ -26,7 +26,7 @@ public:
   //If fileName is invalid, returns a pointer to an empty container
   Pack* buildPack(unordered_map<unsigned int, vector<string> >& initData);
 private:
-  Account* accountant(const string& info);
+  Account* accountant(const vector<string>&);
 };
 
 #endif /* AccountParser_hpp */

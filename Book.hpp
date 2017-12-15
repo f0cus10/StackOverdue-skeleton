@@ -11,7 +11,6 @@ public:
   bool renew(unsigned int dueDate);
   //Returns the book to the library, that is, erases all borrower information
   void returnBook();
-  
   //Returns dueDate;
   unsigned int dueDate() const {return due; }
   //Returns popularity score
@@ -24,13 +23,15 @@ public:
   string getTitle() const {return bookTitle; }
   string getAuthor() const {return bookAuthor; }
   string getGenre() const {return genre; }
+  unsigned int getRenewed() const { return renewed; }
+  bool isOverdue(unsigned int currTime)const{ return due < currTime;}
   
   //Checkout the book
   //If available, checkout book and return true; else, false.
   bool checkout(unsigned int userID, unsigned int dueDate, bool raisePopularity);
   //Check if the book is equal to each other
-  bool operator==(const Book& other);
-  
+  bool operator==(const Book& other){return this->bookTitle == other.bookTitle && this->bookAuthor == other.bookAuthor; }
+
 private:
   //Book Information
   unsigned int bookID;

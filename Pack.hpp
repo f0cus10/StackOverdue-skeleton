@@ -24,7 +24,7 @@ public:
   //Given a userID, add it to the graveyard
   void removeAccount(unsigned int accountID);
   //Return a vector containing all the accounts for the sorting algorithms
-  vector<const Account* const> getAccounts() const;
+  vector<Account*> getAccounts() const;
   //Return a const-pointer to the account, given accountID
   Account* const getAccount(unsigned int accountID);
   //Generate a new userID

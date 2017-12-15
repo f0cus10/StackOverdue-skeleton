@@ -18,11 +18,11 @@ Shelf* BookParser::buildShelf(){
   ifstream file;
   file.open(fileName);
   if(!file.good()){
-    cout << "Could not find file " + fileName + ". Skipping.";
+    cout << "Could not find file \"" + fileName + "\". Skipping." << endl;
     return temp;
   }
   //Else, start parsing the data line
-  cout << "Loading books from \"" + fileName + "\".";
+  cout << "Loading books from \"" + fileName + "\"." << endl;
   //Get the first line from the file
   vector<string> data;
   string numberOfLines;

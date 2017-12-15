@@ -22,6 +22,8 @@ public:
   
   string getName() const { return username; }
   unsigned int getID() const { return userID; }
+  unsigned int getBorrowSize() const {return borrowedBooksID.size();}
+  
 private:
   string username;
   unsigned int userID;

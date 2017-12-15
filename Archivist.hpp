@@ -17,14 +17,14 @@
 
 struct Archivist{
   //Probably made this way too complicated
-  typedef bool(*bookComparator)(Book&, Book&);
-  typedef bool(*accountComparator)(Account&, Account&);
+  typedef bool(*bookComparator)(Book*&,Book*&);
+  typedef bool(*accountComparator)( Account*&, Account*&);
   /* Book-related function */
   bookComparator bookSortSelector(string criteria);
   //Takes in a vector and returns a string
-  string bookToString(vector<const Book* const>&);
+  vector<string> bookToString(const vector<Book*>&, bool includeTabs = false);
   //Takes a book and returns a string of its details
-  string printBook(const Book* const);
+  string printBook(const Book* const, unsigned int time, bool includeTabs = false);
   
   /* Account related functions */
   accountComparator accountSortSelector(string criteria);
@@ -33,7 +33,20 @@ struct Archivist{
   string printAccount(const Account* const);
   //Takes in a vector of accounts and returns a string of the account details.
   //NOTE: Does NOT include the book details
-  string accountToString(vector<const Account* const>&);
+  vector<string> accountToString(const vector<Account*>&);
+  
+  /*comparison functions*/
+  static bool sortByTitle(Book*& lhs, Book*& rhs){return lhs->getTitle() < rhs->getTitle();}
+  static bool sortByAuthor(Book*& lhs, Book*& rhs) {return lhs->getAuthor() < rhs->getAuthor();}
+  static bool sortByGenre(Book*& lhs, Book*& rhs) {return lhs->getGenre() < rhs->getGenre();}
+  static bool sortByBookID(Book*& lhs, Book*& rhs) {return lhs->getID() < rhs->getID();}
+  static bool sortByPopularity( Book*& lhs, Book*& rhs) {return lhs->popularityScore() < rhs->popularityScore(); }
+  static bool sortByName( Account*& lhs, Account*& rhs) { return lhs->getName() < rhs->getName(); }
+  
+  static bool sortByAccountID( Account*& lhs, Account*& rhs){ return lhs->getID() < rhs->getID(); }
+  static bool sortByCheckouts(Account*& lhs, Account*& rhs) { return lhs->getBorrowSize()< rhs->getBorrowSize(); }
+private:
+  string tabEvaluator(bool include){return (include)? "\n\t":"\n"; }
 };
 
 #endif /* Archivist_hpp */

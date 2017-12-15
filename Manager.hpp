@@ -1,3 +1,5 @@
+#ifndef MANAGER_HPP
+#define MANAGER_HPP
 #include <unordered_map>
 #include <string>
 #include "Shelf.hpp"
@@ -13,18 +15,18 @@ public:
   ~Manager();
   //Given the correct criteria, the function will return a string consisting of all the the books in the library.
   //If there are no books, return "No books in your library"
-  string browse(string criteria);
+  vector<string> browse(string criteria);
   //Returns a full description of the specified book. If it is checked out, print those details as well.
-  string book(unsigned int bookID);
+  string book(unsigned int bookID, bool tabs);
   //Prints short description for all books in the library containing a specified phrase in either the book's title or author.
   //Case-sensitive. Returns "No search results found", if none found.
-  string search(string phrase, char criteria);
+  vector<string> search(string phrase, char criteria);
   //Returns a description of the accounts
-  string accounts(string criteria);
+  vector<string> accounts(string criteria, unordered_map<unsigned int, vector<string> >&);
   //Returns a full description of a specified account
   string account(unsigned int accountID);
-  //Checks out a specific book to a a specified account
-  bool checkout(unsigned int bookID, unsigned int accountID);
+  //Checks out a specific book to a specified account
+  bool checkout(unsigned int bookID, unsigned int accountID, unsigned int dueDate = 0);
   //Renews all the books in a specified account
   string renew(unsigned int accountID, unsigned int newDueDate = 0);
   //Returns a specific book to the library. Indicate if it was returned on time or overdue by some period of time.
@@ -38,7 +40,7 @@ public:
   string addAccount(string name);
   string removeAccount(unsigned int accountID);
   string system();
-  string time(unsigned int passTime);
+  void time(unsigned int passTime);
   string exportData();
   string help();
 private:
@@ -56,3 +58,4 @@ private:
   Archivist archivist;
   Time systemTime;
 };
+#endif
