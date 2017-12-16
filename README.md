@@ -41,6 +41,8 @@ After Compilation is successful, run it using:
 ```bash
 $ ./StackOverdue <Books File Name> <Accounts File Name>
 ```
+If no files are provided, no default files will be used
+
 To clean up, run:
 ```bash
 $ make clean
