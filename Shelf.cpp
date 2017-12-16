@@ -45,13 +45,13 @@ bool Shelf::removeBook(unsigned int id){
   return false;
 }
 //Return a vector containing all the books in the library
-Book* Shelf::getBook(unsigned int id){
+Book* Shelf::getBook(unsigned int id) {
   return collection[id];
 }
 //Return a vector containing all the books in the library
 //NOTE: To be used with the exporter
 
-vector<Book*> Shelf::output(){
+vector<Book*> Shelf::output() const{
   vector<Book*> tmp;
   tmp.reserve(collection.size());
   for (auto value: collection){
@@ -64,6 +64,21 @@ vector<Book*> Shelf::output(){
 //TODO: Finish this
 vector<Book*> Shelf::search(string phrase, char type){
   vector<Book*> temp;
+  for(auto iter: collection){
+    size_t found = 0;
+    if(type == 'T'){
+      found = iter.second->getTitle().find(phrase);
+    }
+    else if(type == 'A'){
+      found = iter.second->getAuthor().find(phrase);
+    }
+    else if(type == 'G'){
+      found = iter.second->getGenre().find(phrase);
+    }
+    if(found != string::npos){
+      temp.push_back(iter.second);
+    }
+  }
   return temp;
 }
 //Return a specified book to the library. Modifies borrowerID to the user who had the book. Modifies

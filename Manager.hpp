@@ -7,6 +7,7 @@
 #include "Archivist.hpp"
 #include "Time.hpp"
 using namespace std;
+//This class is too big.
 class Manager{
 public:
   //If a book with the same title and author exists, return true
@@ -29,7 +30,7 @@ public:
   string book(unsigned int bookID, bool tabs);
   //Prints short description for all books in the library containing a specified phrase in either the book's title or author.
   //Case-sensitive. Returns "No search results found", if none found.
-  vector<string> search(string phrase, char criteria);
+  vector<string> search(string phrase, string criteria);
   //Returns a description of the accounts
   vector<string> accounts(string criteria, unordered_map<unsigned int, vector<string> >&);
   //Returns a full description of a specified account
@@ -41,7 +42,7 @@ public:
   //Returns a specific book to the library. Indicate if it was returned on time or overdue by some period of time.
   string returnBook(unsigned int bookID);
   //Generates a list of five book recommendations for a specified account
-  string recommend(unsigned int accountID);
+  vector<string> recommend(unsigned int accountID, vector<string>&);
   //Adds a book with the title, author and genre to the collection
   //Does not check whether the book already exists
   string addBook(string title, string author, string genre);
@@ -50,9 +51,7 @@ public:
   string removeAccount(unsigned int accountID);
   string system();
   string time(unsigned int passTime);
-  string exportData();
-  string help();
-  
+  void exportData(string bookName, string accountName);  
   vector<unsigned int> getNonExistent()const {return nonexistent;}
 private:
   /* Database */

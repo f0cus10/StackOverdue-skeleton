@@ -37,9 +37,11 @@ vector<string> Archivist::bookToString(const vector<Book*>& entries, bool includ
   vector<string> result;
   for(unsigned int i = 0; i < entries.size(); ++i){
     string line = "";
-    line += "\"" + entries[i]->getTitle() + "\" by " + entries[i]->getAuthor() + " (BookID# " + to_string(entries[i]->getID()) + ") [" + entries[i]->getGenre() + "].";
-    if(!includeTabs) line += (entries[i]->availability() == 'B')? " CHECKED OUT (AccountID#" + to_string(entries[i]->borrower()) + ")." : " AVAILABLE.";
-    line += tabEvaluator(includeTabs);
+    if(entries[i] != nullptr){
+      line += "\"" + entries[i]->getTitle() + "\" by " + entries[i]->getAuthor() + " (BookID# " + to_string(entries[i]->getID()) + ") [" + entries[i]->getGenre() + "].";
+      if(!includeTabs) line += (entries[i]->availability() == 'B')? " CHECKED OUT (AccountID#" + to_string(entries[i]->borrower()) + ")." : " AVAILABLE.";
+      line += tabEvaluator(includeTabs);
+    }
     result.push_back(line);
   }
   return result;

@@ -11,7 +11,7 @@ public:
   //Overloaded Destructor
   ~Shelf();
   //Return the size of the collection
-  unsigned int collectionSize(){ return collection.size();}
+  unsigned int collectionSize() const { return collection.size();}
   //If a book with the given title and author exists, return true;
   bool bookExists(string title, string author);
   //If a book does not exist in the collection, add it to the collection. Else, return false
@@ -20,7 +20,7 @@ public:
   bool removeBook(unsigned int id);
   //Return a vector containing all the books in the library
   //NOTE: To be used with the exporter
-  vector<Book*> output();
+  vector<Book*> output() const;
   //Given the bookID, return the book
   Book* getBook(unsigned int id);
   //If books are present containing the same substring, return a vector containg the boooks. Return empty vector, otherwise.

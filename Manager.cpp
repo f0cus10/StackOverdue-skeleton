@@ -17,7 +17,7 @@
 #include "BookParser.hpp"
 #include "AccountParser.hpp"
 #include "Archivist.hpp"
-
+#include "Exporter.hpp"
 using namespace std;
 Manager::Manager(string bookFile, string accountFileName){
   BookParser bookReader(bookFile);
@@ -92,12 +92,6 @@ string Manager::book(unsigned int bookID, bool tabs){
   }
   return archivist.printBook(tmp, systemTime.getTime(), tabs);
 }
-//Prints short description for all books in the library containing a specified phrase in either the book's title or author.
-//Case-sensitive. Returns "No search results found", if none found.
-vector<string> Manager::search(string phrase, char criteria){
-  vector<Book*> searchResult = shelf->search(phrase, criteria);
-  return archivist.bookToString(searchResult);
-}
 //Returns a description of the accounts
 vector<string> Manager::accounts(string criteria, unordered_map<unsigned int, vector<string> >& bookMapper){
   vector< Account*> sortCandidate = users->getAccounts();
@@ -142,7 +136,7 @@ bool Manager::checkout(unsigned int bookID, unsigned int accountID, unsigned int
   }
   status = shelf->getBook(bookID)->checkout(accountID, dueDate, true);
   if(status){
-    users->getAccount(accountID)->checkout(bookID);
+    users->getAccount(accountID)->checkout(bookID, shelf->getBook(bookID)->getAuthor(), shelf->getBook(bookID)->getGenre());
   }
   return status;
 }
@@ -237,10 +231,6 @@ string Manager::time(unsigned int passTime){
   result += to_string(oldTime) + " --> " + to_string(newTime) + ").\n";
   return result;
 }
-string Manager::exportData(){
-  return "Placeholder";
-}
-//string Manager::help();
 //Uses initialState to update the borrow status from the user files
 //After completion, erase the map
 void Manager::updateInitialState(){
@@ -283,4 +273,66 @@ string Manager::system(){
   result += "Number of accounts: " + to_string(data.size()) + ".\n";
   result += "Number of overdue accounts: " + to_string(numberOfOverdueAccounts) + ".\n";
   return result;
+}
+//Prints short description for all books in the library containing a specified phrase in either the book's title or author.
+//Case-sensitive. Returns "No search results found", if none found.
+vector<string> Manager::search(string phrase, string criteria){
+  char type = '\0';
+  if(criteria == "title"){
+    type = 'T';
+  }
+  else if(criteria == "author"){
+    type = 'A';
+  }
+  vector<Book*> searchResult = shelf->search(phrase, type);
+  return archivist.bookToString(searchResult);
+}
+//Generates a list of five book recommendations for a specified account
+vector<string> Manager::recommend(unsigned int accountID, vector<string>& choices){
+  choices.push_back(users->getAccount(accountID)->getFavouriteGenre());
+  choices.push_back(users->getAccount(accountID)->getSecondFavGenre());
+  choices.push_back(users->getAccount(accountID)->getFavouriteAuthor());
+  /* Gather all the results */
+  vector<Book*> favGenre;
+  vector<Book*> secGenre;
+  vector<Book*> favAuthor;
+  if(choices[0] != "") favGenre = shelf->search(choices[0], 'G');
+  if(choices[1] != "") secGenre = shelf->search(choices[1], 'G');
+  if(choices[2] != "") favAuthor = shelf->search(choices[2], 'A');
+  /* Sort these all */
+  vector<Book*> tmp;
+  sort(favGenre.begin(), favGenre.end(), archivist.sortByPopularity);
+  sort(secGenre.begin(), secGenre.end(), archivist.sortByPopularity);
+  sort(favAuthor.begin(), favAuthor.end(), archivist.sortByPopularity);
+  //Retrieve the last 2 elements from favGenre
+  if(!(favGenre.size() < 2)){
+    tmp.push_back(favGenre[favGenre.size()-1]);
+    tmp.push_back(favGenre[favGenre.size()-2]);
+  }
+  else{
+    tmp.push_back(nullptr);
+    tmp.push_back(nullptr);
+  }
+  if(!(secGenre.size() < 2)){
+    tmp.push_back(secGenre[secGenre.size()-1]);
+    tmp.push_back(secGenre[secGenre.size()-2]);
+  }
+  else{
+    tmp.push_back(nullptr);
+    tmp.push_back(nullptr);
+  }
+  if(!(favAuthor.size() < 2)){
+    tmp.push_back(favAuthor[favAuthor.size()-1]);
+  }
+  else{
+    tmp.push_back(nullptr);
+  }
+  return archivist.bookToString(tmp);
+}
+void Manager::exportData(string bookName, string accountName){
+  Exporter* exp = new Exporter(bookName, accountName);
+  //For some stupid reason shelf and users can't be passed as const *.
+  //This is stupid, Object * should be able to bind as const object* but not vice-versa. smh.
+  exp->write(shelf, users);
+  delete exp;
 }

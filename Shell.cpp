@@ -102,7 +102,18 @@ void Shell::callBook(){
 }
 //Call search
 void Shell::callSearch(){
-  cout << "Called Search" << endl;
+  vector<string> criterion {"title","author"};
+  string criteria = criteriaHelper(criterion);
+  string phrase = "";
+  cout << "Enter the search phrase." << endl;
+  cout << "> ";
+  getline(cin, phrase);
+  vector<string> output = librarian->search(phrase, criteria);
+  for(unsigned int i = 0; i < output.size(); ++i){
+    cout << to_string(i+1) << ". " << output[i] << endl;
+  }
+  if(output.size() == 0) cout << "No search results found.\n";
+  cout << endl;
 }
 //Call accounts
 //Could have used a function here to consolidate both Accounts and Browse, but it's already a lot complicated
@@ -180,7 +191,32 @@ void Shell::callReturn(){
 }
 //Call Recommend
 void Shell::callRecommend(){
-  cout << "This function has not been implemented yet " << endl;
+  unsigned int accountID = idValidator("account id");
+  if(accountID == 0) return;
+  if(!librarian->isValid(accountID, 'A')){
+    cout << "AccountID# " << accountID << " not found. " << endl;
+    return;
+  }
+  vector<string> choices;
+  vector<string> recommendations = librarian->recommend(accountID, choices);
+  //Since the output is formatted, we're not going to loop
+  unsigned int ctr = 0;
+  while (ctr < 3) {
+    cout << "You love " << choices[ctr] << ". We Recommend: " << endl;
+    if(ctr == 0){
+      cout << "1. " << recommendations[0] << endl;
+      cout << "2. " << recommendations[1] << endl;
+    }
+    else if (ctr == 1){
+      cout << "1. " << recommendations[2] << endl;
+      cout << "2. " << recommendations[3] << endl;
+    }
+    else if(ctr == 2){
+      cout << "1. " << recommendations[4] << endl;
+    }
+    ++ctr;
+  }
+  cout << endl;
 }
 //You get the idea
 void Shell::callAddb(){
@@ -234,7 +270,17 @@ void Shell::callTime(){
   cout << librarian->time(timeToTravel) << endl;
 }
 void Shell::callExport(){
-  
+  string bookFile;
+  string accountFile;
+  cout << "Enter the name for the books file. (This may overwrite a file)" << endl;
+  cout << "> ";
+  getline(cin, bookFile);
+  cout << "Enter the name for the accounts file. (This may overwrite a file)" << endl;
+  cout << "> ";
+  getline(cin, accountFile);
+  librarian->exportData(bookFile, accountFile);
+  cout << "Books data succesfully exported to \"" << bookFile << "\"." << endl;
+  cout << "Accounts data successfully exported to \"" << accountFile << "\"." << endl;
 }
 void Shell::callHelp(){
   cout << "BROWSE: Provides the status of all the books." << endl;

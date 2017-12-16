@@ -16,8 +16,10 @@ vector<unsigned int> Account::previousBorrowList() const{
   return previousBorrows;
 }
 //Add a book to the list of currently borrowed books
-void Account::checkout(unsigned int bookID){
+void Account::checkout(unsigned int bookID, string bookAuthor, string genre){
   borrowedBooksID.push_back(bookID);
+  favouriteAuthor[bookAuthor] += 1;
+  favouriteGenre[genre] += 1;
 }
 //Return a book to the library and add it to the list of previous borrows
 //TODO: Consider using UniqueVector instead of std::Vector
@@ -46,4 +48,27 @@ bool Account::contains(unsigned int bookID, unsigned int& index, char period){
     }
   }
   return false;
+}
+/*Recommendation getter */
+string Account::getFavouriteGenre() const {
+  return recommendSearch(favouriteGenre);
+}
+string Account::getSecondFavGenre() const {
+  string ignore = recommendSearch(favouriteGenre);
+  return recommendSearch(favouriteGenre, ignore);
+}
+string Account::getFavouriteAuthor() const{
+  return recommendSearch(favouriteAuthor);
+}
+//Finds the most frequent item in the ordered list, does not take into account ignore
+string Account::recommendSearch(const unordered_map<string, unsigned int>& hash, string ignore) const{
+  string result = "";
+  unsigned int resultFreq = 0;
+  for(auto iter: hash){
+    if(resultFreq < iter.second && iter.first != ignore){
+      result = iter.first;
+      resultFreq = iter.second;
+    }
+  }
+  return result;
 }
