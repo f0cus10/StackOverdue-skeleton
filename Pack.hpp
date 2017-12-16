@@ -19,6 +19,7 @@ public:
   //Default Constructor
   //Overloaded Destructor
   ~Pack();
+  unsigned int getCollectionSize() const {return accounts.size();}
   //Given an account, add it to the collection
   void addAccount(Account* newAccount);
   //Given a userID, add it to the graveyard

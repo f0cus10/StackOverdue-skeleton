@@ -49,7 +49,7 @@ public:
   string addAccount(string name);
   string removeAccount(unsigned int accountID);
   string system();
-  void time(unsigned int passTime);
+  string time(unsigned int passTime);
   string exportData();
   string help();
   

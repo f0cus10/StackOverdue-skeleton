@@ -229,16 +229,13 @@ string Manager::removeAccount(unsigned int accountID){
   users->removeAccount(accountID);
   return outcome;
 }
-//string Manager::system(){
-//  string info = "";
-//  info += "System time: " + to_string(systemTime.getTime());
-//  info += "Number of books: " + to_string(shelf->collectionSize());
-//  info += "Number of overdue books: " + archivist.countOverdueBooks(shelf).size();
-//  info += "Number of accounts: " + users->dataBaseSize();
-//  info += "Number of overdue books" + archivist.countOverdueAccounts.size();
-//}
-void Manager::time(unsigned int passTime){
+string Manager::time(unsigned int passTime){
+  unsigned int oldTime = systemTime.getTime();
   systemTime.updateTime(passTime);
+  unsigned int newTime = systemTime.getTime();
+  string result = "Travelled through " + to_string(passTime) + " days through time. (";
+  result += to_string(oldTime) + " --> " + to_string(newTime) + ").\n";
+  return result;
 }
 string Manager::exportData(){
   return "Placeholder";
@@ -266,4 +263,24 @@ void Manager::updateInitialState(){
     }
   }
   initialState.clear();
+}
+string Manager::system(){
+  string result = "";
+  result += "System time: " + to_string(systemTime.getTime()) + ".\n";
+  result += "Number of books: " + to_string(shelf->collectionSize()) + ".\n";
+  //To count the number of overdue books, we'll use a simple principal but a slow one
+  vector<Account*> data = users->getAccounts();
+  unsigned int numberOfOverdue = 0;
+  unsigned int numberOfOverdueAccounts = 0;
+  for(unsigned int i = 0; i < data.size(); ++i){
+    unsigned int tmp = 0;
+    if(hasOverdue(data[i]->getID(), tmp)){
+      numberOfOverdueAccounts += 1;
+      numberOfOverdue += tmp;
+    }
+  }
+  result += "Number of overdue books: " + to_string(numberOfOverdue) + ".\n";
+  result += "Number of accounts: " + to_string(data.size()) + ".\n";
+  result += "Number of overdue accounts: " + to_string(numberOfOverdueAccounts) + ".\n";
+  return result;
 }

@@ -94,7 +94,7 @@ void Shell::callBrowse(){
 }
 //Call book
 void Shell::callBook(){
-  unsigned int input = idValidator("book");
+  unsigned int input = idValidator("book id");
   //Then access the librarian
   if(input == 0) return;
   string output = librarian->book(input, false);
@@ -124,16 +124,16 @@ void Shell::callAccounts(){
 }
 //Call account
 void Shell::callAccount(){
-  unsigned int accountID = idValidator("account");
+  unsigned int accountID = idValidator("account id");
   if(accountID == 0) return;
   string output = librarian->account(accountID);
   cout << output << endl;
 }
 //call checkout
 void Shell::callCheckout(){
-  unsigned int accountID = idValidator("account");
+  unsigned int accountID = idValidator("account id");
   if(accountID == 0) return;
-  unsigned int bookID = idValidator("book");
+  unsigned int bookID = idValidator("book id");
   if(bookID == 0) return;
   
   if(!librarian->isValid(accountID, 'A')){
@@ -161,7 +161,7 @@ void Shell::callCheckout(){
 }
 //Call renew
 void Shell::callRenew(){
-  unsigned int accountID = idValidator("account");
+  unsigned int accountID = idValidator("account id");
   if(librarian->isValid(accountID, 'A') == false){
     cout << "AccountID# " << accountID << " not found. " << endl;
     return;
@@ -170,7 +170,7 @@ void Shell::callRenew(){
 }
 //Call return
 void Shell::callReturn(){
-  unsigned int bookID = idValidator("book");
+  unsigned int bookID = idValidator("book id");
   if(librarian->isValid(bookID, 'B') == false){
     cout << "BookID# " << bookID << " not found. " << endl;
     return;
@@ -206,21 +206,32 @@ void Shell::callAddb(){
   return;
 }
 void Shell::callRemoveb(){
-  unsigned int toBeRemoved = idValidator("book");
+  unsigned int toBeRemoved = idValidator("book id");
   if (toBeRemoved == 0) return;
   cout << librarian->removeBook(toBeRemoved) << endl;
 }
 void Shell::callAdda(){
-  
+  string name;
+  cout << "Enter the new user's name." << endl;
+  cout << "> ";
+  getline(cin, name);
+  cout << librarian->addAccount(name);
 }
 void Shell::callRemovea(){
-  
+  unsigned userID = idValidator("account id");
+  if(userID == 0) return;
+  if(librarian->isValid(userID, 'A')){
+    cout << librarian->removeAccount(userID);
+    return;
+  }
+  cout << "AccountID# " << userID << " not found. " << endl;
 }
 void Shell::callSystem(){
-  
+  cout << librarian->system() << endl;
 }
 void Shell::callTime(){
-  
+  unsigned int timeToTravel = idValidator("number of days to time travel");
+  cout << librarian->time(timeToTravel) << endl;
 }
 void Shell::callExport(){
   
@@ -268,7 +279,7 @@ string Shell::criteriaHelper(const vector<string>& criterion){
   return *iter;
 }
 unsigned int Shell::idValidator(string type){
-  cout << "Enter the " << type << " id." << endl << endl;
+  cout << "Enter the " << type << " ." << endl << endl;
   cout << "> ";
   string userInput;
   getline(cin, userInput);
