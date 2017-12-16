@@ -3,10 +3,10 @@
 ## __StackOverdue__ ## 
 StackOverdue is a library management system with export-import, time travel and overdue book tracking capabilites
 
-##__StackOverdue Interface__##
+## __StackOverdue Interface__ ##
 The program is executed via a shell, so only the shell's COMMANDS and API are listed (read didn't have time). 
 
-##__Shell Commands__##
+## __Shell Commands__ ##
 1. `BROWSE`: Provides the status of all the books.
 2. `BOOK`: Provides the status of a specific book.
 3. `SEARCH`: Searches for all books with a key-phrase in the title or author.
@@ -26,7 +26,7 @@ The program is executed via a shell, so only the shell's COMMANDS and API are li
 17. `HELP`: Displays this help menu.
 18. `EXIT`: Exists the program.
 
-##__Shell Interface__##
+## __Shell Interface__ ##
 
 1. `void prompt()`: Prompts the user for an input and processes it
 2. `bool getStatus()`: Returns false when the user inputs 'EXIT' into it.
@@ -47,6 +47,6 @@ To clean up, run:
 ```bash
 $ make clean
 ```
-##__Extra Features(read Bugs & Limitations)__#
+## __Extra Features(read Bugs & Limitations)__ ##
 1. Although `RECOMMEND` has been checked for the `NULL` case, there maybe unexpected crash when the book recommendation is empty
 2. Input validation only happens at the `Shell` class. All other classes require validated input
